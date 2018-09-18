@@ -17,7 +17,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 
 public class GUI extends JFrame {
-
+	public Check check;
 	private JPanel contentPane;
 	private JTable table;
 	private JTextField textField;

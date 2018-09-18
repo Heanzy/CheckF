@@ -2,12 +2,14 @@ package checkF;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.logging.FileHandler;
 
 import javax.swing.JTable;
 
 public class Check {
     ArrayList<ArrayList<Double>> data = new ArrayList<ArrayList<Double>>();
+    ArrayList<ArrayList<Double>> database = new ArrayList<ArrayList<Double>>();
     ArrayList<Double> average = new ArrayList<>();
     double averageX;
      int n;
@@ -20,8 +22,30 @@ public class Check {
     double s1;
     double s2;
     double F;
-
-
+    
+   public void setDatabase() {
+	   try {
+		File filea = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/FCheck(a).txt");
+		File fileb = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/FCheck(b).txt");
+		BufferedReader bra = new BufferedReader(new FileReader(filea));
+		BufferedReader brb = new BufferedReader(new FileReader(filea));
+		String everyline;
+		Iterator<ArrayList<Double>> iterator = database.iterator();
+		while((everyline=bra.readLine())!=null){
+			database.add(new ArrayList<Double>());			
+			String [] temp=everyline.split("\t");
+			ArrayList<Double> tempArray = iterator.next();
+			for(int i = 0;i<temp.length;i++)
+				tempArray.add(Double.parseDouble(temp[i]));
+		}
+	} catch (Exception e) {
+		// TODO: handle exception
+		System.out.println("error");
+	}
+   }
+   public ArrayList<ArrayList<Double>> getDatabase() {
+	return database;
+}
     public void setAverageX() {
         Double sum = 0d;
         for(ArrayList<Double> E:data){
@@ -59,8 +83,33 @@ public class Check {
         return N1;
     }
 
-    public void setData(ArrayList<ArrayList<Double>> data) {
-        this.data = data;
+    public void setDataFromFile() {
+    	try {
+    		File file = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/data.txt");
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            //BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            String [] nam = br.readLine().split("\t");
+            System.out.println(nam[0]);
+            setM(Integer.parseInt(nam[0]));
+            setN(Integer.parseInt(nam[1]));
+            for(int i = 0;i<getM();i++){
+                String temp = br.readLine();
+                System.out.println(temp);
+                String [] sp = temp.split("\t");
+                getData().add(new ArrayList<Double> ());
+                for(int j = 0;j < sp.length;j++){
+                	
+                    getData().get(i).add( Double.parseDouble(sp[j]));              
+                }
+                System.out.println();
+
+            }
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("error");
+		}
+    	
     }
 
     public void setM(int m) {
@@ -155,32 +204,12 @@ public class Check {
     	}
     		
     }
-    public void setDataToTable(JTable table){
-    	
-    }
+    
     public static void main(String [] args){
 
-        try {
-            Check main1 = new Check();
-            File file = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/data.txt");
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            //BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-            String [] nam = br.readLine().split("\t");
-            System.out.println(nam[0]);
-            main1.setM(Integer.parseInt(nam[0]));
-            main1.setN(Integer.parseInt(nam[1]));
-            for(int i = 0;i<main1.getM();i++){
-                String temp = br.readLine();
-                System.out.println(temp);
-                String [] sp = temp.split("\t");
-                main1.getData().add(new ArrayList<Double> ());
-                for(int j = 0;j < sp.length;j++){
-                	
-                    main1.getData().get(i).add( Double.parseDouble(sp[j]));              
-                }
-                System.out.println();
 
-            }
+            Check main1 = new Check();
+            main1.setDataFromFile();
 
             main1.setAverage();
             for(Double e:main1.getAverage())
@@ -203,11 +232,6 @@ public class Check {
             System.out.println(main1.getS2());
             main1.setF();
             System.out.println(main1.getF());
-            br.close();
-        }catch (IOException E){
-        	//E.printStackTrace();
-        	System.out.println("error");
-        }
 
     }
 }
