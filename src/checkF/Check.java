@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.FileHandler;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 
 public class Check {
@@ -37,6 +38,7 @@ public class Check {
 			ArrayList<Double> tempArray = iterator.next();
 			for(int i = 0;i<temp.length;i++)
 				tempArray.add(Double.parseDouble(temp[i]));
+			//System.out.println(tempArray.toString());
 		}
 	} catch (Exception e) {
 		// TODO: handle exception
@@ -85,8 +87,12 @@ public class Check {
 
     public void setDataFromFile() {
     	try {
-    		File file = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/data.txt");
-            BufferedReader br = new BufferedReader(new FileReader(file));
+    		JFileChooser jFileChooser = new JFileChooser();
+    		jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    		int returnVal = jFileChooser.showOpenDialog(null);
+    		File file_choosed = jFileChooser.getSelectedFile();
+    		//File file = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/data.txt");
+            BufferedReader br = new BufferedReader(new FileReader(file_choosed));
             //BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             String [] nam = br.readLine().split("\t");
             System.out.println(nam[0]);
@@ -192,20 +198,59 @@ public class Check {
     public int getV2() {
         return v2;
     }
-    public void getTableData(JTable table){
+    public void setTableData(JTable table){
     	int row = table.getRowCount();
+    	System.out.println(row);
     	int column = table.getColumnCount();
-    	for(int i = 1;i<= row;i++){
+    	System.out.println(column);
+    	for(int i = 0;i< row;i++){
     		data.add(new ArrayList<Double>());
-    		for(int j = 1;j<= column;j++){
-    			if(table.getValueAt(row, column) != null)
-    				data.get(i-1).add((Double) table.getValueAt(i, j));//这里可能有问题
+    		for(int j = 0;j< column;j++){
+    			if(table.getValueAt(i, j) != null)
+    				data.get(i).add(Double.valueOf(table.getValueAt(i, j).toString()));//这里可能有问题
+    			System.out.println("ok");
     		}
     	}
     		
     }
-    
-    public static void main(String [] args){
+    public double getTableCheck(int v1,int v2) {
+    	return database.get(v2-1).get(v1-1);
+    }
+    public int setNFromTable(JTable table) {
+    	int column = table.getColumnCount();
+    	int row = table.getRowCount();
+    	int N = 0;
+    	for(int i = 0;i<column;i++)
+    		if(table.getValueAt(0, i)!=null)
+    			N++;
+    	return N;		
+    }
+    public int setMFromTable(JTable table) {
+    	int row = table.getRowCount();
+    	int M = 0;
+    	for(int i = 0;i<row;i++)
+    		if(table.getValueAt(i, 0)!=null)
+    			M++;
+    	return M;	
+    }
+    public int FindTableDataStartRow(JTable table) {
+    	int row = table.getRowCount();
+    	int M = 0;
+    	for(int i = 0;i<row;i++)
+    		if(table.getValueAt(i, 0)==null)
+    			M++;
+    	return M;	
+    }
+public int FindTableDataStartColumn(JTable table) {
+	int column = table.getColumnCount();
+	int row = table.getRowCount();
+	int N = 0;
+	for(int i = 0;i<column;i++)
+		if(table.getValueAt(0, i)==null)
+			N++;
+	return N;
+    }
+    public void outputToconsole(){
 
 
             Check main1 = new Check();
