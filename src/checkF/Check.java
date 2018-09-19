@@ -198,14 +198,14 @@ public class Check {
     public int getV2() {
         return v2;
     }
-    public void setTableData(JTable table){
+    public void setTableData(JTable table,int []start){
     	int row = table.getRowCount();
     	System.out.println(row);
     	int column = table.getColumnCount();
     	System.out.println(column);
-    	for(int i = 0;i< row;i++){
+    	for(int i = start[0];i< start[0]+m;i++){
     		data.add(new ArrayList<Double>());
-    		for(int j = 0;j< column;j++){
+    		for(int j = start[1];j< start[1]+n;j++){
     			if(table.getValueAt(i, j) != null)
     				data.get(i).add(Double.valueOf(table.getValueAt(i, j).toString()));//这里可能有问题
     			System.out.println("ok");
@@ -216,20 +216,20 @@ public class Check {
     public double getTableCheck(int v1,int v2) {
     	return database.get(v2-1).get(v1-1);
     }
-    public int setNFromTable(JTable table) {
+    public int setNFromTable(JTable table,int [] start) {
     	int column = table.getColumnCount();
     	int row = table.getRowCount();
     	int N = 0;
-    	for(int i = 0;i<column;i++)
-    		if(table.getValueAt(0, i)!=null)
+    	for(int i = start[1];i<column;i++)
+    		if(table.getValueAt(start[0], i)!=null)
     			N++;
     	return N;		
     }
-    public int setMFromTable(JTable table) {
+    public int setMFromTable(JTable table,int [] start) {
     	int row = table.getRowCount();
     	int M = 0;
-    	for(int i = 0;i<row;i++)
-    		if(table.getValueAt(i, 0)!=null)
+    	for(int i = start[0];i<row;i++)
+    		if(table.getValueAt(i, start[1])!=null)
     			M++;
     	return M;	
     }
@@ -241,14 +241,24 @@ public class Check {
     			M++;
     	return M;	
     }
-public int FindTableDataStartColumn(JTable table) {
+public int [] FindTableDataStart(JTable table) {
+	int [] start =new int[2];
 	int column = table.getColumnCount();
 	int row = table.getRowCount();
 	int N = 0;
-	for(int i = 0;i<column;i++)
-		if(table.getValueAt(0, i)==null)
-			N++;
-	return N;
+	boolean isFound = false;
+	for(int i = 0;i<column&&!isFound;i++)
+		for(int j = 0;j<row&&!isFound;j++){
+			if(table.getValueAt(i, j)!=null){
+				start[0]=i;
+				start[1]=j;
+				isFound = true;
+			}
+		}
+		
+			
+	
+	return start;
     }
     public void outputToconsole(){
 

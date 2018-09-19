@@ -155,14 +155,16 @@ public class GUI extends JFrame {
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-					check.setTableData(table);
-				 check.setAverage();
+					int [] start = check.FindTableDataStart(table);
+					check.setM(check.setMFromTable(table,start));
+		            System.out.println(check.getM());
+		            check.setN(check.setNFromTable(table,start));
+		            System.out.println(check.getN());
+					check.setTableData(table,start);		
+					check.setAverage();
 		            for(Double e:check.getAverage())
 		            	System.out.println(e);
-		            check.setM(check.setMFromTable(table));
-		            System.out.println(check.getM());
-		            check.setN(check.setNFromTable(table));
-		            System.out.println(check.getN());
+		            
 		            check.setDatabase();
 		            check.setN1();
 		            System.out.println(check.getN1());
