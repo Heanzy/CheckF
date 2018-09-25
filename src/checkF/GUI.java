@@ -21,7 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GUI extends JFrame {
-	public Check check;
+	//public Check check;
 	private JPanel contentPane;
 	private JTable table;
 	private JTextField textField;
@@ -53,7 +53,6 @@ public class GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public GUI() {
-		check = new Check();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1151, 639);
 		contentPane = new JPanel();
@@ -66,36 +65,36 @@ public class GUI extends JFrame {
 		table.setColumnSelectionAllowed(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
+				{"", "", "", "", "", "", "", "", ""},
 			},
 			new String[] {
 				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
@@ -152,9 +151,12 @@ public class GUI extends JFrame {
 		textField_6.setBounds(840, 436, 66, 21);
 		contentPane.add(textField_6);
 		
-		JButton btnNewButton = new JButton("New button");
+		JButton btnNewButton = new JButton("\u5F00\u59CB");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+					Check check = new Check();
+					check.setDatabase();
+					//check.setDataFromFile();
 					int [] start = check.FindTableDataStart(table);
 					check.setM(check.setMFromTable(table,start));
 		            System.out.println(check.getM());
@@ -163,9 +165,7 @@ public class GUI extends JFrame {
 					check.setTableData(table,start);		
 					check.setAverage();
 		            for(Double e:check.getAverage())
-		            	System.out.println(e);
-		            
-		            check.setDatabase();
+		            	System.out.println(e);		           
 		            check.setN1();
 		            System.out.println(check.getN1());
 		            check.setAverageX();
@@ -191,10 +191,11 @@ public class GUI extends JFrame {
 				textField_5.setText(String.valueOf(check.getV1()));
 				textField_6.setText(String.valueOf(check.getV2()));
 				textField_7.setText(String.valueOf(check.getTableCheck(check.getV1(), check.getV2())));
+				//check.CleanArray();
 			}
 		});
 		btnNewButton.setForeground(new Color(0, 0, 0));
-		btnNewButton.setBackground(new Color(0, 0, 0));
+		btnNewButton.setBackground(Color.LIGHT_GRAY);
 		btnNewButton.setBounds(794, 537, 133, 32);
 		contentPane.add(btnNewButton);
 		
@@ -234,5 +235,16 @@ public class GUI extends JFrame {
 		textField_7.setColumns(10);
 		textField_7.setBounds(1038, 25, 66, 21);
 		contentPane.add(textField_7);
+		
+		JButton btnNewButton_1 = new JButton("\u91CD\u7F6E");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				   for (int i = 0; i < table.getRowCount(); i++)
+					      for(int j = 0; j < table.getColumnCount(); j++) 
+					          table.setValueAt("", i, j);					 
+			}
+		});
+		btnNewButton_1.setBounds(794, 491, 133, 32);
+		contentPane.add(btnNewButton_1);
 	}
 }

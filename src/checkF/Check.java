@@ -23,25 +23,43 @@ public class Check {
     double s1;
     double s2;
     double F;
-    
+    public void CleanArray() {
+    	data.clear();
+    	average.clear();
+    }
    public void setDatabase() {
 	   try {
-		File filea = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/FCheck(a).txt");
-		File fileb = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/FCheck(b).txt");
+//		JFileChooser jFileChoosera = new JFileChooser();
+//   		jFileChoosera.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+//   		JFileChooser jFileChooserb = new JFileChooser();
+//   		jFileChooserb.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+//   		int returnVala = jFileChoosera.showOpenDialog(null);
+//   		File file_chooseda = jFileChoosera.getSelectedFile();
+//   		int returnValb = jFileChooserb.showOpenDialog(null);
+//   		File file_choosedb = jFileChooserb.getSelectedFile();
+   		File filea = new File("C:/CheckF/src/checkF/FCheck(a).txt");
+   		//File fileb = new File("C:/CheckF/src/checkF/FCheck(b).txt");
+   		System.out.println("FileOK");
 		BufferedReader bra = new BufferedReader(new FileReader(filea));
-		BufferedReader brb = new BufferedReader(new FileReader(filea));
+		//BufferedReader brb = new BufferedReader(new FileReader(fileb));
+		System.out.println("BufferOK");
 		String everyline;
-		Iterator<ArrayList<Double>> iterator = database.iterator();
+		//Iterator<ArrayList<Double>> iterator = database.iterator();
 		while((everyline=bra.readLine())!=null){
-			database.add(new ArrayList<Double>());			
+			System.out.println(everyline);
+			ArrayList<Double> tempA = new ArrayList<>();			
 			String [] temp=everyline.split("\t");
-			ArrayList<Double> tempArray = iterator.next();
+			
 			for(int i = 0;i<temp.length;i++)
-				tempArray.add(Double.parseDouble(temp[i]));
-			//System.out.println(tempArray.toString());
+				tempA.add(Double.parseDouble(temp[i]));
+			System.out.println(tempA.size());
+			database.add(tempA);
 		}
-	} catch (Exception e) {
+		bra.close();
+		//brb.close();
+	} catch (IOException e) {
 		// TODO: handle exception
+		System.out.println(e.getMessage());
 		System.out.println("error");
 	}
    }
@@ -206,8 +224,8 @@ public class Check {
     	for(int i = start[0];i< start[0]+m;i++){
     		data.add(new ArrayList<Double>());
     		for(int j = start[1];j< start[1]+n;j++){
-    			if(table.getValueAt(i, j) != null)
-    				data.get(i).add(Double.valueOf(table.getValueAt(i, j).toString()));//这里可能有问题
+    			if(table.getValueAt(i, j) != "")
+    				data.get(i-start[0]).add(Double.valueOf(table.getValueAt(i, j).toString()));//这里可能有问题
     			System.out.println("ok");
     		}
     	}
@@ -221,7 +239,7 @@ public class Check {
     	int row = table.getRowCount();
     	int N = 0;
     	for(int i = start[1];i<column;i++)
-    		if(table.getValueAt(start[0], i)!=null)
+    		if(table.getValueAt(start[0], i)!="")
     			N++;
     	return N;		
     }
@@ -229,7 +247,7 @@ public class Check {
     	int row = table.getRowCount();
     	int M = 0;
     	for(int i = start[0];i<row;i++)
-    		if(table.getValueAt(i, start[1])!=null)
+    		if(table.getValueAt(i, start[1])!="")
     			M++;
     	return M;	
     }
@@ -237,7 +255,7 @@ public class Check {
     	int row = table.getRowCount();
     	int M = 0;
     	for(int i = 0;i<row;i++)
-    		if(table.getValueAt(i, 0)==null)
+    		if(table.getValueAt(i, 0)=="")
     			M++;
     	return M;	
     }
@@ -247,15 +265,15 @@ public int [] FindTableDataStart(JTable table) {
 	int row = table.getRowCount();
 	int N = 0;
 	boolean isFound = false;
-	for(int i = 0;i<column&&!isFound;i++)
-		for(int j = 0;j<row&&!isFound;j++){
-			if(table.getValueAt(i, j)!=null){
+	for(int i = 0;i<row&&!isFound;i++)
+		for(int j = 0;j<column&&!isFound;j++){
+			if(table.getValueAt(i, j)!=""){
 				start[0]=i;
 				start[1]=j;
 				isFound = true;
 			}
 		}
-		
+	System.out.println("起始坐标是："+start[0]+start[1]);	
 			
 	
 	return start;
