@@ -1,11 +1,14 @@
 package checkF;
 import java.io.*;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.FileHandler;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 public class Check {
@@ -23,11 +26,22 @@ public class Check {
     double s1;
     double s2;
     double F;
+    double S;
+    public double getS() {
+		return S;
+	}
+    public void setS() {
+    	double sum = 0d;
+    	for(ArrayList<Double> E:data)
+    		for(double e: E)
+    			sum += (e-averageX)*(e-averageX)/(N1-1);
+    	S = Math.sqrt(sum);
+	}
     public void CleanArray() {
     	data.clear();
     	average.clear();
     }
-   public void setDatabase() {
+   public void setDatabase(String a) {
 	   try {
 //		JFileChooser jFileChoosera = new JFileChooser();
 //   		jFileChoosera.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -37,7 +51,11 @@ public class Check {
 //   		File file_chooseda = jFileChoosera.getSelectedFile();
 //   		int returnValb = jFileChooserb.showOpenDialog(null);
 //   		File file_choosedb = jFileChooserb.getSelectedFile();
-   		File filea = new File("C:/CheckF/src/checkF/FCheck(a).txt");
+		File filea = null;
+		if(a.equals("0.05"))
+			filea = new File("src/checkF/FCheck(a).txt");
+		if(a.equals("0.01"))
+			filea = new File("src/checkF/FCheck(b).txt");
    		//File fileb = new File("C:/CheckF/src/checkF/FCheck(b).txt");
    		System.out.println("FileOK");
 		BufferedReader bra = new BufferedReader(new FileReader(filea));
@@ -109,6 +127,7 @@ public class Check {
     		jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     		int returnVal = jFileChooser.showOpenDialog(null);
     		File file_choosed = jFileChooser.getSelectedFile();
+    		
     		//File file = new File("C:/Users/Heanzy/workspace/checkF/src/checkF/data.txt");
             BufferedReader br = new BufferedReader(new FileReader(file_choosed));
             //BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -129,8 +148,9 @@ public class Check {
 
             }
 			
-		} catch (Exception e) {
+		} catch (IOException e) {
 			// TODO: handle exception
+			//JOptionPane.showMessageDialog(null, "读取失败", "标题",JOptionPane.WARNING_MESSAGE);  
 			System.out.println("error");
 		}
     	
@@ -226,7 +246,7 @@ public class Check {
     		for(int j = start[1];j< start[1]+n;j++){
     			if(table.getValueAt(i, j) != "")
     				data.get(i-start[0]).add(Double.valueOf(table.getValueAt(i, j).toString()));//这里可能有问题
-    			System.out.println("ok");
+    			System.out.println(data);
     		}
     	}
     		
@@ -259,7 +279,7 @@ public class Check {
     			M++;
     	return M;	
     }
-public int [] FindTableDataStart(JTable table) {
+public int [] FindTableDataStart(JTable table)throws Exception {
 	int [] start =new int[2];
 	int column = table.getColumnCount();
 	int row = table.getRowCount();
@@ -274,37 +294,219 @@ public int [] FindTableDataStart(JTable table) {
 			}
 		}
 	System.out.println("起始坐标是："+start[0]+start[1]);	
-			
+	if(!isFound)
+		throw new Exception();
 	
 	return start;
     }
-    public void outputToconsole(){
-
-
-            Check main1 = new Check();
-            main1.setDataFromFile();
-
-            main1.setAverage();
-            for(Double e:main1.getAverage())
-            	System.out.println(e);
-            main1.setN1();
-            System.out.println(main1.getN1());
-            main1.setAverageX();
-            System.out.println(main1.getAverageX());
-            main1.setQ1();
-            System.out.println(main1.getQ1());
-            main1.setQ2();
-            System.out.println(main1.getQ2());
-            main1.setV1();
-            System.out.println(main1.getV1());
-            main1.setV2();
-            System.out.println(main1.getV2());
-            main1.setS1();
-            System.out.println(main1.getS1());
-            main1.setS2();
-            System.out.println(main1.getS2());
-            main1.setF();
-            System.out.println(main1.getF());
-
+	/*
+	 * F保留两位小数
+	 */
+	public String RetainedDecimal2F(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(2); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(F);
+	}
+	/*
+	 * 总平均值保留两位小数
+	 */
+	public String RetainedDecimal2AverageX(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(2); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(averageX);
+	}
+	/*
+	 * 组间方差保留两位小数
+	 */
+	public String RetainedDecimal2S1(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(2); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s1);
+	}
+	/*
+	 * 组内方差保留两位小数
+	 */
+	public String RetainedDecimal2S2(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(2); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s2);
+	}
+	/*
+	 * 总标准差保留两位小数
+	 */
+	public String RetainedDecimal2S(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(2); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(S);
+	}
+	
+	public String RetainedDecimal3F(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(3); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(F);
+	}
+	
+	public String RetainedDecimal5F(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(5); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(F);
+	}
+	public String RetainedDecimal7F(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(7); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(F);
+	}
+	
+	public String RetainedDecimal3AverageX(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(3); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(averageX);
+	}
+	public String RetainedDecimal7AverageX(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(7); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(averageX);
+	}
+	public String RetainedDecimal5AverageX(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(5); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(averageX);
+	}
+	public String RetainedDecimal3S1(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(3); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s1);
+	}
+	public String RetainedDecimal5S1(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(5); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s1);
+	}
+	public String RetainedDecimal7S1(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(7); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s1);
+	}
+	public String RetainedDecimal3S2(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(3); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s2);
+	}
+	public String RetainedDecimal5S2(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(5); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s2);
+	}
+	public String RetainedDecimal7S2(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(7); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(s2);
+	}
+	public String RetainedDecimal3S(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(3); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(S);
+	}
+	public String RetainedDecimal5S(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(5); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(S);
+	}
+	public String RetainedDecimal7S(){
+		 NumberFormat nf = NumberFormat.getNumberInstance();
+		 // 保留两位小数
+		 nf.setMaximumFractionDigits(7); 
+		 // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+		 nf.setRoundingMode(RoundingMode.UP);
+		 return nf.format(S);
+	}
+    public   void CalculateFromFile(){
+    		 setDataFromFile();
+             setAverage();
+             for(Double e:getAverage())
+             	System.out.println(e);
+             setN1();
+             System.out.println(getN1());
+             setAverageX();
+             System.out.println(getAverageX());
+             setQ1();
+             System.out.println(getQ1());
+             setQ2();
+             System.out.println(getQ2());
+             setV1();
+             System.out.println(getV1());
+             setV2();
+             System.out.println(getV2());
+             setS1();
+             System.out.println(getS1());
+             setS2();
+             System.out.println(getS2());
+             setF();
+             System.out.println(getF());
+             setS();
+             System.out.println(getS());		                  
+    }
+    public boolean isPass(){
+    	if(F<database.get(v2-1).get(v1-1))
+    		return true;
+    	else
+    		return false;
     }
 }
